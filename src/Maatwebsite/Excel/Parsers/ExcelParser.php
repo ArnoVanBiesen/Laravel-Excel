@@ -344,7 +344,7 @@ class ExcelParser {
      */
     protected function getOriginalIndex($cell)
     {
-        return $cell->getValue();
+        return $cell->getFormattedValue();
     }
 
     /**
@@ -490,38 +490,38 @@ class ExcelParser {
      * @param  integer $index
      * @return string
      */
-    protected function parseCell($index)
-    {
-        // If the cell is a date time
-        if ( $this->cellIsDate($index) )
-        {
-            // Parse the date
-            return $this->parseDate();
-        }
+     protected function parseCell($index)
+     {
+         // If the cell is a date time
+         if ( $this->cellIsDate($index) )
+         {
+             // Parse the date
+             return $this->parseDate();
+         }
 
-        // Check if we want calculated values or not
-        elseif ( $this->reader->needsCalculation() )
-        {
-            // Get calculated value
-            return $this->getCalculatedValue();
-        }
-        else
-        {
-            // Get real value
-            return $this->getCellValue();
-        }
-    }
+         // Check if we want calculated values or not
+         elseif ( $this->reader->needsCalculation() && $index != 'webid_sport' && $index != 'webid_spd')
+         {
+             // Get calculated value
+             return $this->getCalculatedValue();
+         }
+         else
+         {
+             // Get real value
+             return $this->getCellValue();
+         }
+     }
 
-    /**
+     /**
      * Return the cell value
      * @return string
      */
-    protected function getCellValue()
-    {
-        $value = $this->cell->getValue();
+     protected function getCellValue()
+     {
+         $value = $this->cell->getOldCalculatedValue();
 
-        return $this->encode($value);
-    }
+         return $this->encode($value);
+     }
 
     /**
      * Get the calculated value
